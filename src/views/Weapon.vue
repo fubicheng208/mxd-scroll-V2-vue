@@ -178,7 +178,8 @@
                 console.log(this.ruleForm);
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        axios.post("http://localhost:18080/mxd/calculate", this.ruleForm).then(function (resp) {
+                        //替换为自己web服务的地址
+                        axios.post("xxx/mxd/calculate", this.ruleForm).then(function (resp) {
                             _this.$alert(resp.data, "消息", {
                                 confirmButtonText: '确定',
                                 callback: action => {
