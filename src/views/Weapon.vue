@@ -1,49 +1,60 @@
 <template>
-    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="150px" class="demo-ruleForm">
-        <el-form-item label="增加的攻击/魔攻" prop="weapon.buf_attack">
-            <el-input v-model.number="ruleForm.weapon.buf_attack" placeholder="卷轴和火花加的魔攻，即蓝色数字（黄色数字为火花）"></el-input>
-        </el-form-item>
-        <el-form-item label="武器基础攻击/魔攻" prop="weapon.base_attack">
-            <el-input v-model.number="ruleForm.weapon.base_attack"></el-input>
-        </el-form-item>
-        <el-form-item label="主属性增加" prop="weapon.main_attribute">
-            <el-input v-model.number="ruleForm.weapon.main_attribute" placeholder="如战士就是力量"></el-input>
-        </el-form-item>
-        <el-form-item label="无关属性增加" prop="weapon.vice_attribute">
-            <el-input v-model.number="ruleForm.weapon.vice_attribute" placeholder="如战士就是运气或智力"></el-input>
-        </el-form-item>
 
-        <el-form-item label="星星数" prop="weapon.starNum">
-            <el-input v-model.number="ruleForm.weapon.starNum"></el-input>
-        </el-form-item>
+    <div>
 
-        <el-form-item label="卷轴数" prop="weapon.scrollNum">
-            <el-input v-model.number="ruleForm.weapon.scrollNum"></el-input>
-        </el-form-item>
+        <el-dialog title="计算结果" :visible.sync="dialogTableVisible">
+            <el-table :data="tableData">
+                <el-table-column property="name" label="卷轴" width="250"></el-table-column>
+                <el-table-column property="num" label="数量" width="150"></el-table-column>
+            </el-table>
+        </el-dialog>
 
-        <el-form-item label="武器等级" prop="weapon.grade">
-            <el-input v-model.number="ruleForm.weapon.grade" placeholder="扣减等级不算"></el-input>
-        </el-form-item>
+        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="150px" class="demo-ruleForm">
+            <el-form-item label="增加的攻击/魔攻" prop="weapon.buf_attack">
+                <el-input v-model.number="ruleForm.weapon.buf_attack" placeholder="卷轴和火花加的魔攻，即蓝色数字（黄色数字为火花）"></el-input>
+            </el-form-item>
+            <el-form-item label="武器基础攻击/魔攻" prop="weapon.base_attack">
+                <el-input v-model.number="ruleForm.weapon.base_attack"></el-input>
+            </el-form-item>
+            <el-form-item label="主属性增加" prop="weapon.main_attribute">
+                <el-input v-model.number="ruleForm.weapon.main_attribute" placeholder="如战士就是力量"></el-input>
+            </el-form-item>
+            <el-form-item label="无关属性增加" prop="weapon.vice_attribute">
+                <el-input v-model.number="ruleForm.weapon.vice_attribute" placeholder="如战士就是运气或智力"></el-input>
+            </el-form-item>
 
-        <el-form-item label="邮箱" prop="email">
-            <el-input v-model="ruleForm.email" placeholder="全选所有卷轴时必填"></el-input>
-        </el-form-item>
+            <el-form-item label="星星数" prop="weapon.starNum">
+                <el-input v-model.number="ruleForm.weapon.starNum"></el-input>
+            </el-form-item>
 
-        <el-form-item label="可能使用的卷轴" prop="weapon.possibleScrolls">
-            <el-checkbox-group v-model="ruleForm.weapon.possibleScrolls">
-                <el-checkbox label="惊人卷" name="possibleScrolls"></el-checkbox>
-                <el-checkbox label="RED卷" name="possibleScrolls"></el-checkbox>
-                <el-checkbox label="V卷" name="possibleScrolls"></el-checkbox>
-                <el-checkbox label="X卷" name="possibleScrolls"></el-checkbox>
-                <el-checkbox label="星火卷" name="possibleScrolls"></el-checkbox>
-                <el-checkbox label="痕迹" name="possibleScrolls"></el-checkbox>
-            </el-checkbox-group>
-        </el-form-item>
-        <el-form-item>
-            <el-button type="primary" @click="submitForm('ruleForm')">计算可能卷轴组合</el-button>
-            <el-button @click="resetForm('ruleForm')">重置</el-button>
-        </el-form-item>
-    </el-form>
+            <el-form-item label="卷轴数" prop="weapon.scrollNum">
+                <el-input v-model.number="ruleForm.weapon.scrollNum"></el-input>
+            </el-form-item>
+
+            <el-form-item label="武器等级" prop="weapon.grade">
+                <el-input v-model.number="ruleForm.weapon.grade" placeholder="扣减等级不算"></el-input>
+            </el-form-item>
+
+            <el-form-item label="邮箱" prop="email">
+                <el-input v-model="ruleForm.email" placeholder="全选所有卷轴时必填"></el-input>
+            </el-form-item>
+
+            <el-form-item label="可能使用的卷轴" prop="weapon.possibleScrolls">
+                <el-checkbox-group v-model="ruleForm.weapon.possibleScrolls">
+                    <el-checkbox label="惊人卷" name="possibleScrolls"></el-checkbox>
+                    <el-checkbox label="RED卷" name="possibleScrolls"></el-checkbox>
+                    <el-checkbox label="V卷" name="possibleScrolls"></el-checkbox>
+                    <el-checkbox label="X卷" name="possibleScrolls"></el-checkbox>
+                    <el-checkbox label="星火卷" name="possibleScrolls"></el-checkbox>
+                    <el-checkbox label="痕迹" name="possibleScrolls"></el-checkbox>
+                </el-checkbox-group>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="submitForm('ruleForm')">计算可能卷轴组合</el-button>
+                <el-button @click="resetForm('ruleForm')">重置</el-button>
+            </el-form-item>
+        </el-form>
+    </div>
 </template>
 <script>
     export default {
@@ -120,7 +131,7 @@
                     if (!Number.isInteger(value)) {
                         callback(new Error('请输入数字值'));
                     } else {
-                        if (value !== 140 && value !== 150 && value !== 160 && value !== 200 )
+                        if (value !== 140 && value !== 150 && value !== 160 && value !== 200)
                             callback(new Error('仅支持140、150、160、200级武器计算'));
                         else
                             callback();
@@ -141,27 +152,33 @@
                     },
                     email: ''
                 },
+                tableData: [
+                    {name: "卷轴1", num: 0},
+                    {name: "卷轴2", num: 0},
+                    {name: "卷轴3", num: 0}
+                ],
+                dialogTableVisible: false,
                 rules: {
                     'weapon.base_attack': [
-                        { validator: checkAttack, trigger: 'change'}
+                        {validator: checkAttack, trigger: 'change'}
                     ],
                     'weapon.buf_attack': [
-                        { validator: checkAttack, trigger: 'change'}
+                        {validator: checkAttack, trigger: 'change'}
                     ],
                     'weapon.main_attribute': [
-                        { validator: checkAttribute, trigger: 'change'}
+                        {validator: checkAttribute, trigger: 'change'}
                     ],
                     'weapon.vice_attribute': [
-                        { validator: checkAttribute, trigger: 'change'}
+                        {validator: checkAttribute, trigger: 'change'}
                     ],
                     'weapon.starNum': [
-                        { validator: checkStar, trigger: 'change'}
+                        {validator: checkStar, trigger: 'change'}
                     ],
                     'weapon.scrollNum': [
-                        { validator: checkScrollNum, trigger: 'change'}
+                        {validator: checkScrollNum, trigger: 'change'}
                     ],
                     'weapon.grade': [
-                        { validator: checkGrade, trigger: 'change'}
+                        {validator: checkGrade, trigger: 'change'}
                     ],
                     email: [
                         {type: 'email', required: false, message: '请填写正确的邮箱地址', trigger: 'change'}
@@ -179,13 +196,23 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         //替换为自己web服务的地址
-                        axios.post("xxx/mxd/calculate", this.ruleForm).then(function (resp) {
-                            _this.$alert(resp.data, "消息", {
-                                confirmButtonText: '确定',
-                                callback: action => {
-                                    _this.$router.push('/weapon')
-                                }
-                            });
+                        axios.post("http://xxxxx:6001/mxd/getWeaponResultList", this.ruleForm).then(function (resp) {
+                            // console.log(JSON.parse(JSON.stringify(resp.data.content))['result']);
+                            var code = JSON.parse(JSON.stringify(resp.data))['code'];
+                            console.log(code)
+                            var message = JSON.parse(JSON.stringify(resp.data))['msg'];
+                            console.log(message)
+                            if (code === 200) {
+                                _this.tableData = JSON.parse(JSON.stringify(resp.data))['result'];
+                                _this.dialogTableVisible = true;
+                            } else {
+                                _this.$alert(message, "消息", {
+                                    confirmButtonText: '确定',
+                                    callback: action => {
+                                        _this.$router.push('/weapon')
+                                    }
+                                });
+                            }
                         })
                     } else {
                         console.log('error submit!!');
